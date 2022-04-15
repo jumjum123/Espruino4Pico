@@ -14,30 +14,15 @@
  */
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include <tusb.h>
-
-#include "jshardware.h"
-#include "jsinteractive.h"
-
-int initConsole(){//Init USB console
-   UNUSED(1); 
-	
-}; 
-void espruinoToConsole(int c){
-  putchar(c);
-}
-int consoleToEspruino(){ //read chars from USB console
-  int charsFound;
-  if(!tud_cdc_connected()){
-	return -1;
+#include "hardware/irq.h"
+#include "jshardwareTools.h"
+ 
+uint32_t getIrqMask(){
+  uint32_t r;
+  int i;
+  r = 0;
+  for(i = 0;i < 16; i++){
+	if(irq_is_enabled(i)) {r += (1 << i);}	  
   }
-  else{
-	charsFound = tud_cdc_available();
-	while(charsFound > 0){
-	  char c = getchar();
-	  charsFound--;
-	  jshPushIOCharEvents(EV_USBSERIAL, &c, 1);
-	}
-    return 0;	
-  }    
+  return r;
 }

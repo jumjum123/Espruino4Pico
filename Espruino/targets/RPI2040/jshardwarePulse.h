@@ -14,3 +14,8 @@
  * Contains RPI2040 board specific functions.
  * ----------------------------------------------------------------------------
  */
+ 
+void PulseReset();
+
+void PulseInit();
+ 

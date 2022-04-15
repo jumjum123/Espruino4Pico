@@ -15,5 +15,14 @@
  * ----------------------------------------------------------------------------
  */
  
- #include "jshardwarePulse.h"
+#include "jshardware.h"
+#include "jshardwarePulse.h"
+#define UNUSED(x) (void)(x)
+ 
+void PulseReset(){
+   UNUSED(1); 
+}
+void PulseInit(){
+  UNUSED(1);	
+}
  

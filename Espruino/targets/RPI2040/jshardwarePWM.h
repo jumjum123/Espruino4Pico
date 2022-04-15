@@ -14,3 +14,7 @@
  * Contains RPI2040 board specific functions.
  * ----------------------------------------------------------------------------
  */
+ 
+ void PWMReset();
+ voidPWMInit();
+ 

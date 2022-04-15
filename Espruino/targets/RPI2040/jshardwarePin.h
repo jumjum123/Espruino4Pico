@@ -16,4 +16,5 @@
  */
  
  void jshPinDefaultPullup();
+ void PinInit();
  

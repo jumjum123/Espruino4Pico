@@ -14,3 +14,7 @@
  * Contains RPI2040 board specific functions.
  * ----------------------------------------------------------------------------
  */
+ 
+ void I2CReset();
+ void I2CInit();
+ 

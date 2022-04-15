@@ -15,5 +15,12 @@
  * ----------------------------------------------------------------------------
  */
  
- #include "jshardwareZimer.h"
+#include "jshardware.h"
+#include "jshardwareTimer.h"
+#define UNUSED(x) (void)(x)
+ 
+void TimerReset(){
+   UNUSED(1); 
+	 
+}
  

@@ -14,3 +14,6 @@
  * Contains RPI2040 board specific functions.
  * ----------------------------------------------------------------------------
  */
+ 
+ void UartReset();
+ void UartInit();

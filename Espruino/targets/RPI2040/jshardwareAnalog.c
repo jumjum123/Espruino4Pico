@@ -15,6 +15,7 @@
  * ----------------------------------------------------------------------------
  */
  
+#include "jshardware.h"
 #include "jshardwareAnalog.h"
  
 #include "pico/stdlib.h"
@@ -33,3 +34,11 @@ int ADCRead(Pin pin){
     jsError("not an ADC pin");
   }
 } 
+
+JsVarFloat jshPinAnalog(Pin pin) {
+  return (JsVarFloat) ADCRead(pin) * 3.3f / 4096;
+}
+
+int jshPinAnalogFast(Pin pin) {
+  return ADCRead(pin);
+}

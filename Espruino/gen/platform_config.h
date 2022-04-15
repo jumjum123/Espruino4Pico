@@ -32,18 +32,18 @@
 #define RAM_TOTAL (256*1024)
 #define FLASH_TOTAL (0*1024)
 
-#define JSVAR_CACHE_SIZE                2500 // Number of JavaScript variables in RAM
+#define JSVAR_CACHE_SIZE                4000 // Number of JavaScript variables in RAM
 #define FLASH_AVAILABLE_FOR_CODE        262144
 #define FLASH_PAGE_SIZE                 4096
 #define FLASH_START                     0x8000000
 
-#define FLASH_SAVED_CODE_START            134217728
+#define FLASH_SAVED_CODE_START            0
 #define FLASH_SAVED_CODE_LENGTH           1048576
 
 #define CLOCK_SPEED_MHZ                      48
-#define USART_COUNT                          1
-#define SPI_COUNT                            1
-#define I2C_COUNT                            1
+#define USART_COUNT                          2
+#define SPI_COUNT                            2
+#define I2C_COUNT                            2
 #define ADC_COUNT                            0
 #define DAC_COUNT                            0
 #define EXTI_COUNT                           16

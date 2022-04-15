@@ -15,5 +15,12 @@
  * ----------------------------------------------------------------------------
  */
  
- #include "jshardwarePWM.h"
+#include "jshardware.h"
+#include "jshardwarePWM.h"
+#define UNUSED(x) (void)(x)
+ 
+void PWMReset(){
+   UNUSED(1); 
+	 
+}
  

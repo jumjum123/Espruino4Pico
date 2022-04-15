@@ -12,32 +12,9 @@
  * RPI2040 USB Console specific functions
  * ----------------------------------------------------------------------------
  */
-#include <stdio.h>
-#include "pico/stdlib.h"
-#include <tusb.h>
+#ifndef JSHARDWARETOOLS_H_
+#define JSHARDWARETOOLS_H_
 
-#include "jshardware.h"
-#include "jsinteractive.h"
+uint32_t getIrqMask();
 
-int initConsole(){//Init USB console
-   UNUSED(1); 
-	
-}; 
-void espruinoToConsole(int c){
-  putchar(c);
-}
-int consoleToEspruino(){ //read chars from USB console
-  int charsFound;
-  if(!tud_cdc_connected()){
-	return -1;
-  }
-  else{
-	charsFound = tud_cdc_available();
-	while(charsFound > 0){
-	  char c = getchar();
-	  charsFound--;
-	  jshPushIOCharEvents(EV_USBSERIAL, &c, 1);
-	}
-    return 0;	
-  }    
-}
+#endif /* JSHARDWARETOOLS_H_ */

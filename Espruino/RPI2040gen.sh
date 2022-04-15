@@ -1,5 +1,5 @@
 # user pico
-cd /home/pico/pico/examples/Espruino
+cd /home/pico/pico-examples/Espruino
 
 # to be done BOARD=RPI2040 make boardjson >gen/boardjson.txt
 

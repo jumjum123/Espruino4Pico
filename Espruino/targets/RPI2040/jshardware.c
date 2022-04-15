@@ -60,9 +60,13 @@ void jshReset() {
   jshResetDevices();
   jshPinDefaultPullup();
   ADCReset();
-  //SPIReset();
-  //I2CReset();
-  //TimerReset();
+  FlashReset();
+  SPIReset();
+  I2CReset();
+  PulseReset();
+  PWMReset();
+  TimerReset();
+  UartReset();
 }
 
 void jshKill() {
@@ -117,9 +121,9 @@ void jshDelayMicroseconds(int microsec) {
 
 // see jshardwarePin.c void jshPinSetState(Pin pin, JshPinState state) {}
 
-JshPinState jshPinGetState(Pin pin) {
-  return JSHPINSTATE_UNDEFINED;
-}
+//JshPinState jshPinGetState(Pin pin) {
+//  return JSHPINSTATE_UNDEFINED;
+//}
 
 /* see jshardwarePin.c void jshPinSetValue(Pin pin, bool value) {
 //  if (pinInfo[pin].port & JSH_PIN_NEGATED) value=!value;
@@ -156,14 +160,14 @@ void jshSetSystemTime(JsSysTime time) {
 
 // ----------------------------------------------------------------------------
 
-JsVarFloat jshPinAnalog(Pin pin) {
+/*JsVarFloat jshPinAnalog(Pin pin) {
   return (JsVarFloat) ADCRead(pin) * 3.3f / 4096;
 }
 
 int jshPinAnalogFast(Pin pin) {
   return ADCRead(pin);
 }
-
+*/
 JshPinFunction jshPinAnalogOutput(Pin pin, JsVarFloat value, JsVarFloat freq, JshAnalogOutputFlags flags) { // if freq<=0, 
   return JSH_NOTHING;
 }
@@ -232,39 +236,30 @@ void jshUSARTKick(IOEventFlags device) {
     }
 }
 
-void jshSPISetup(IOEventFlags device, JshSPIInfo *inf) {
-}
+//void jshSPISetup(IOEventFlags device, JshSPIInfo *inf) {}
 
 /** Send data through the given SPI device (if data>=0), and return the result
  * of the previous send (or -1). If data<0, no data is sent and the function
  * waits for data to be returned */
-int jshSPISend(IOEventFlags device, int data) {
-}
+//int jshSPISend(IOEventFlags device, int data) {}
 
 /** Send 16 bit data through the given SPI device. */
-void jshSPISend16(IOEventFlags device, int data) {
-}
+//void jshSPISend16(IOEventFlags device, int data) {}
 
 /** Set whether to send 16 bits or 8 over SPI */
-void jshSPISet16(IOEventFlags device, bool is16) {
-}
+//void jshSPISet16(IOEventFlags device, bool is16) {}
 
 /** Set whether to use the receive interrupt or not */
-void jshSPISetReceive(IOEventFlags device, bool isReceive) {
-}
+//void jshSPISetReceive(IOEventFlags device, bool isReceive) {}
 
 /** Wait until SPI send is finished, */
-void jshSPIWait(IOEventFlags device) {
-}
+//void jshSPIWait(IOEventFlags device) {}
 
-void jshI2CSetup(IOEventFlags device, JshI2CInfo *inf) {
-}
+//void jshI2CSetup(IOEventFlags device, JshI2CInfo *inf) {}
 
-void jshI2CWrite(IOEventFlags device, unsigned char address, int nBytes, const unsigned char *data, bool sendStop) {
-}
+//void jshI2CWrite(IOEventFlags device, unsigned char address, int nBytes, const unsigned char *data, bool sendStop) {}
 
-void jshI2CRead(IOEventFlags device, unsigned char address, int nBytes, unsigned char *data, bool sendStop) {
-}
+//void jshI2CRead(IOEventFlags device, unsigned char address, int nBytes, unsigned char *data, bool sendStop) {}
 
 /// Enter simple sleep mode (can be woken up by interrupts). Returns true on success
 bool jshSleep(JsSysTime timeUntilWake) {

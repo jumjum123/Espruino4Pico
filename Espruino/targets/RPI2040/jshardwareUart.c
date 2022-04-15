@@ -15,5 +15,12 @@
  * ----------------------------------------------------------------------------
  */
  
- #include "jshardwareUart.h"
+#include "jshardware.h"
+#include "jshardwareUart.h"
+
+#define UNUSED(x) (void)(x)
+ 
+ void UartReset(){
+   UNUSED(1); 
+ }
  

@@ -10,6 +10,13 @@ add_executable(Espruino main.c
 	targets/RPI2040/jshardwarePin.c
 	targets/RPI2040/jshardwareAnalog.c
 	targets/RPI2040/jshardwareFlash.c
+	targets/RPI2040/jshardwareSPI.c
+	targets/RPI2040/jshardwareI2C.c
+	targets/RPI2040/jshardwarePulse.c
+	targets/RPI2040/jshardwarePWM.c
+	targets/RPI2040/jshardwareTimer.c
+    targets/RPI2040/jshardwareUart.c
+	targets/RPI2040/jshardwareTools.c
 	src/jslex.c
 	src/jsflags.c 
 	src/jsflash.c 
@@ -68,6 +75,8 @@ target_link_libraries(Espruino
   pico_stdlib
   hardware_adc
   hardware_flash
+  hardware_i2c
+  hardware_spi
 )
 
 add_subdirectory(targets)

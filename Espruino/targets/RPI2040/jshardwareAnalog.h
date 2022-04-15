@@ -18,4 +18,4 @@
 #include "jspininfo.h"
  
 void ADCReset();
-int ADCRead(Pin pin);
+void ADCInit();

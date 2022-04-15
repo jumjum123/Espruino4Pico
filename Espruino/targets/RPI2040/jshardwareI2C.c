@@ -15,5 +15,25 @@
  * ----------------------------------------------------------------------------
  */
  
- #include "jshardwareI2C.h"
+#include "jshardware.h"
+#include "jshardwareI2C.h"
+#define UNUSED(x) (void)(x)
+ 
+void I2CReset(){
+   UNUSED(1); 
+	 
+}
+
+void jshI2CSetup(IOEventFlags device, JshI2CInfo *inf) {
+	
+}
+
+void jshI2CWrite(IOEventFlags device, unsigned char address, int nBytes, const unsigned char *data, bool sendStop) {
+	
+}
+
+void jshI2CRead(IOEventFlags device, unsigned char address, int nBytes, unsigned char *data, bool sendStop) {
+	
+}
+
  

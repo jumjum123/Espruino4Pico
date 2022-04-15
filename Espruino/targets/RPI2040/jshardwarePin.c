@@ -15,10 +15,11 @@
  * ----------------------------------------------------------------------------
  */
  
- #include "jshardware.h"
- #include "jshardwarePin.h"
+#include "jshardware.h"
+#include "jshardwarePin.h"
+#define UNUSED(x) (void)(x)
  
- #include "pico/stdlib.h"
+#include "pico/stdlib.h"
  
 void jshPinSetStateRange(Pin start, Pin end, JshPinState state){
   for(Pin p = start;p <= end; p++){
@@ -59,7 +60,18 @@ void jshPinSetState(Pin pin,JshPinState state ) {
   }
   return;	  
 }
+JshPinState jshPinGetState(Pin pin) {
+  if(gpio_is_dir_out(pin)){
+	return JSHPINSTATE_GPIO_OUT;
+  }
+  else{
+	if(gpio_is_pulled_up(pin)) return JSHPINSTATE_GPIO_IN_PULLUP;
+	if(gpio_is_pulled_down(pin)) return JSHPINSTATE_GPIO_IN_PULLDOWN;
+	return JSHPINSTATE_GPIO_IN;
+  }
+}
 void jshPinSetValue(Pin pin, bool value) {
+  gpio_set_dir(pin, GPIO_OUT);
   if(value) gpio_put(pin,1);
   else gpio_put(pin,0);
 }
