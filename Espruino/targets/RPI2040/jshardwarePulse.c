@@ -25,4 +25,6 @@ void PulseReset(){
 void PulseInit(){
   UNUSED(1);	
 }
- 
+void jshPinPulse(Pin pin, bool value, JsVarFloat time) {
+	
+} 

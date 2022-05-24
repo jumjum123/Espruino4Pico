@@ -20,19 +20,9 @@
 #include "jshardwareTools.h"
 #include "hardware/irq.h"
 
-void testFlash(){
-printf("doTest\n");
-  uint32_t mask = getIrqMask();
-  irq_set_mask_enabled(mask,false);
-  
-    flash_range_erase(1048576, 4096);
-  irq_set_mask_enabled(mask,true);
-printf("TestDone\n");
-}
 int main(){
     stdio_init_all();
     while (!tud_cdc_connected()) { sleep_ms(100);  }
-testFlash();
     jshInit();
 	jsvInit(4000);
 	jsiInit(true);

@@ -42,6 +42,8 @@
 #include "pico/stdlib.h"
 #include "pico/unique_id.h"
 #include "hardware/timer.h"
+#include "hardware/watchdog.h"
+#include "hardware/uart.h"
 #include <tusb.h>
 // ----------------------------------------------------------------------------
 
@@ -78,8 +80,6 @@ int64_t idleDelayCB(alarm_id_t id, void *user_data) {
 void jshIdle() {
   if (firstIdle){
 	add_alarm_in_ms(1000, idleDelayCB, NULL, false);
-	//sleep_ms(5000);
-	//jsiOneSecondAfterStartup();
     firstIdle = false;
   }
 }
@@ -104,11 +104,14 @@ int jshGetSerialNumber(unsigned char *data, int maxChars) {
 }
 
 // ----------------------------------------------------------------------------
-
+uint32_t irqMask;
 void jshInterruptOff() {
+  irqMask = getIrqMask();
+  irq_set_mask_enabled(irqMask, false);
 }
 
 void jshInterruptOn() {
+  irq_set_mask_enabled(irqMask, true);
 }
 
 /// Are we currently in an interrupt?
@@ -118,23 +121,6 @@ bool jshIsInInterrupt() {
 
 void jshDelayMicroseconds(int microsec) {
 }
-
-// see jshardwarePin.c void jshPinSetState(Pin pin, JshPinState state) {}
-
-//JshPinState jshPinGetState(Pin pin) {
-//  return JSHPINSTATE_UNDEFINED;
-//}
-
-/* see jshardwarePin.c void jshPinSetValue(Pin pin, bool value) {
-//  if (pinInfo[pin].port & JSH_PIN_NEGATED) value=!value;
-}*/
-
-/* see jshardwarePin.c bool jshPinGetValue(Pin pin) {
-  bool value = 0;
-  if (pinInfo[pin].port & JSH_PIN_NEGATED) value=!value;
-  return value;
-}
-*/
 
 bool jshIsDeviceInitialised(IOEventFlags device) { return true; }
 
@@ -160,44 +146,10 @@ void jshSetSystemTime(JsSysTime time) {
 
 // ----------------------------------------------------------------------------
 
-/*JsVarFloat jshPinAnalog(Pin pin) {
-  return (JsVarFloat) ADCRead(pin) * 3.3f / 4096;
-}
-
-int jshPinAnalogFast(Pin pin) {
-  return ADCRead(pin);
-}
-*/
-JshPinFunction jshPinAnalogOutput(Pin pin, JsVarFloat value, JsVarFloat freq, JshAnalogOutputFlags flags) { // if freq<=0, 
-  return JSH_NOTHING;
-}
-
-void jshPinPulse(Pin pin, bool value, JsVarFloat time) {
-}
-
-bool jshCanWatch(Pin pin) {
-  return true;
-}
-
 IOEventFlags jshGetEventFlagsForPin(Pin pin) {
   for (int i=0;i<16;i++)
     if (eventFlagsToPin[i]==pin)
       return EV_EXTI0+i;
-  return EV_NONE;
-}
-
-IOEventFlags jshPinWatch(Pin pin, bool shouldWatch) {
-  if (shouldWatch)
-    for (int i=0;i<16;i++)
-      if (eventFlagsToPin[i]==PIN_UNDEFINED) {
-        eventFlagsToPin[i]=pin;
-        return EV_EXTI0+i;
-      }
-  else {
-    for (int i=0;i<16;i++)
-      if (eventFlagsToPin[i]==pin)
-        eventFlagsToPin[i]=PIN_UNDEFINED;
-  }
   return EV_NONE;
 }
 
@@ -207,9 +159,6 @@ bool jshGetWatchedPinState(IOEventFlags device) {
 
 bool jshIsEventForPin(IOEvent *event, Pin pin) {
   return IOEVENTFLAGS_GETTYPE(event->flags) == jshGetEventFlagsForPin(pin);
-}
-
-void jshUSARTSetup(IOEventFlags device, JshUSARTInfo *inf) {
 }
 
 /** Kick a device into action (if required). For instance we may need
@@ -226,8 +175,11 @@ void jshUSARTKick(IOEventFlags device) {
 		  putchar(c);
 		  break;
 	    case EV_SERIAL1:
-	  
+          uart_putc_raw(uart0,c);
 	      break;
+		case EV_SERIAL2:
+		  uart_putc_raw(uart1,c);
+		  break;
 	    default:
 	  
 	      break;
@@ -236,46 +188,12 @@ void jshUSARTKick(IOEventFlags device) {
     }
 }
 
-//void jshSPISetup(IOEventFlags device, JshSPIInfo *inf) {}
-
-/** Send data through the given SPI device (if data>=0), and return the result
- * of the previous send (or -1). If data<0, no data is sent and the function
- * waits for data to be returned */
-//int jshSPISend(IOEventFlags device, int data) {}
-
-/** Send 16 bit data through the given SPI device. */
-//void jshSPISend16(IOEventFlags device, int data) {}
-
-/** Set whether to send 16 bits or 8 over SPI */
-//void jshSPISet16(IOEventFlags device, bool is16) {}
-
-/** Set whether to use the receive interrupt or not */
-//void jshSPISetReceive(IOEventFlags device, bool isReceive) {}
-
-/** Wait until SPI send is finished, */
-//void jshSPIWait(IOEventFlags device) {}
-
-//void jshI2CSetup(IOEventFlags device, JshI2CInfo *inf) {}
-
-//void jshI2CWrite(IOEventFlags device, unsigned char address, int nBytes, const unsigned char *data, bool sendStop) {}
-
-//void jshI2CRead(IOEventFlags device, unsigned char address, int nBytes, unsigned char *data, bool sendStop) {}
-
 /// Enter simple sleep mode (can be woken up by interrupts). Returns true on success
 bool jshSleep(JsSysTime timeUntilWake) {
   JsVarFloat t = jshGetMillisecondsFromTime(timeUntilWake);
   if (t>0x7FFFFFFF) t=0x7FFFFFFF;
   timeToSleep = (int)t;
   return false;
-}
-
-void jshUtilTimerDisable() {
-}
-
-void jshUtilTimerReschedule(JsSysTime period) {
-}
-
-void jshUtilTimerStart(JsSysTime period) {
 }
 
 JshPinFunction jshGetCurrentPinFunction(Pin pin) {
@@ -296,35 +214,13 @@ JsVarFloat jshReadTemperature() { return NAN; };
 JsVarFloat jshReadVRef()  { return NAN; };
 unsigned int jshGetRandomNumber() { return rand(); }
 
-/*
-bool jshFlashGetPage(uint32_t addr, uint32_t *startAddr, uint32_t *pageSize) {
-  return true;
-}
-JsVar *jshFlashGetFree() {
-  JsVar *jsFreeFlash = jsvNewEmptyArray();
-  return jsFreeFlash;
-}
-void jshFlashErasePage(uint32_t addr) {
-
-}
-void jshFlashRead(void *buf, uint32_t addr, uint32_t len) {
-  return;
-}
-void jshFlashWrite(void *buf, uint32_t addr, uint32_t len) {
-  return;
-}
-
-// Just pass data through, since we can access flash at the same address we wrote it
-size_t jshFlashGetMemMapAddress(size_t addr) {
-  return 0;
-}
-*/
-
 unsigned int jshSetSystemClock(JsVar *options) {
   return 0;
 }
 
 /// Perform a proper hard-reboot of the device
 void jshReboot() {
-  jsExceptionHere(JSET_ERROR, "Not implemented");
+  printf("Reboot in a second\n");
+  watchdog_reboot(0,0,1000);
+  //jsExceptionHere(JSET_ERROR, "Not implemented");
 }

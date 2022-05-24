@@ -1,7 +1,6 @@
 /*
  * This file is part of Espruino, a JavaScript interpreter for Microcontrollers
  *
- * Copyright (C) 2013 Gordon Williams <gw@pur3.co.uk> for Espruino
  * Copyright (C) 2022 Juergen Marsch <juergenmarsch@googlemail.com> for RPI2040 port
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,5 +15,6 @@
 #define JSHARDWARETOOLS_H_
 
 uint32_t getIrqMask();
+void print_buf(const uint8_t *buf, size_t len);
 
 #endif /* JSHARDWARETOOLS_H_ */

@@ -1,7 +1,6 @@
 /*
  * This file is part of Espruino, a JavaScript interpreter for Microcontrollers
  *
- * Copyright (C) 2013 Gordon Williams <gw@pur3.co.uk> for Espruino
  * Copyright (C) 2022 Juergen Marsch <juergenmarsch@googlemail.com> for RPI2040 port
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -25,4 +24,20 @@ uint32_t getIrqMask(){
 	if(irq_is_enabled(i)) {r += (1 << i);}	  
   }
   return r;
+}
+
+// for testing
+void print_buf(const uint8_t *buf, size_t len) {
+  for (size_t i = 0; i < len; ++i) {
+    printf("%02x", buf[i]);
+    if (i % 16 == 15)
+      printf("\n");
+    else
+      printf(" ");
+  }
+  printf("\n");
+}
+char bool2char(bool v){
+  if(v) return 'T';
+  else return 'F';
 }

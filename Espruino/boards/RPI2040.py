@@ -35,7 +35,7 @@ chip = {
   'family'  : "RPI2040",
   'package' : "",
   'ram'     : 256,
-  'flash'   : 0,
+  'flash'   : 1024,
   'speed'   : 48,
   'usart'   : 2,
   'spi'     : 2,
@@ -43,10 +43,10 @@ chip = {
   'adc'     : 0,
   'dac'     : 0,
   'saved_code' : {
-    'address' : 0x0000, #start of flash is XIPBase, start of flash for files is 1MB, will be calculates in jshardwareflash.c
+    'address' : 0x10100000, 
     'page_size' : 4096,
-    'pages' : 256, # Entire 1MB of external flash
-    'flash_available' : 256 # lots - this is fake
+    'pages' : 8, # Entire 1MB of external flash
+    'flash_available' : 1024 # lots - this is fake
   },
 };
 devices = {

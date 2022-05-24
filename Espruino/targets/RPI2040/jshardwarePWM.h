@@ -16,5 +16,6 @@
  */
  
  void PWMReset();
- voidPWMInit();
+ void PWMInit();
+ void writePinPWM(Pin pin,uint16_t value,uint16_t freq);
  

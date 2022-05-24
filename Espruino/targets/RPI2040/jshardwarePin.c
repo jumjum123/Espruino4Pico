@@ -77,4 +77,14 @@ void jshPinSetValue(Pin pin, bool value) {
 }
 bool jshPinGetValue(Pin pin) {
   return gpio_get(pin);
-}	
+}
+/// Can the given pin be watched? it may not be possible because of conflicts
+bool jshCanWatch(Pin pin){ return true;}
+/// start watching pin - return the EXTI (IRQ number flag) associated with it
+void gpio_callback(uint gpio, uint32_t events) {
+    printf("GPIO %i %i\n", gpio, events);
+	jshPushIOWatchEvent(gpio);
+}
+IOEventFlags jshPinWatch(Pin pin, bool shouldWatch){
+  gpio_set_irq_enabled_with_callback(pin, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, shouldWatch,&gpio_callback);
+}

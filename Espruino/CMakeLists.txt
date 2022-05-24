@@ -2,7 +2,7 @@
 
 pico_sdk_init()
 
-add_definitions(-DJSVAR_MALLOC -DUSB)
+add_definitions(-DJSVAR_MALLOC -DUSB -DUSE_HEATSHRINK)
 
 add_executable(Espruino main.c
 	targets/RPI2040/jshardwareConsole.c
@@ -77,6 +77,7 @@ target_link_libraries(Espruino
   hardware_flash
   hardware_i2c
   hardware_spi
+  hardware_pwm
 )
 
 add_subdirectory(targets)
