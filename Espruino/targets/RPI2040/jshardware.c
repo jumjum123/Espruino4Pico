@@ -41,9 +41,11 @@
 /* pico libs */
 #include "pico/stdlib.h"
 #include "pico/unique_id.h"
+#include   "pico/util/datetime.h"
 #include "hardware/timer.h"
 #include "hardware/watchdog.h"
 #include "hardware/uart.h"
+#include   "hardware/rtc.h"
 #include <tusb.h>
 // ----------------------------------------------------------------------------
 
@@ -55,6 +57,7 @@ void jshInit() {
   jshInitDevices();
   jshPinDefaultPullup();
   ADCReset();
+rtc_init();
   firstIdle = true;
 }
 
@@ -107,7 +110,7 @@ int jshGetSerialNumber(unsigned char *data, int maxChars) {
 uint32_t irqMask;
 void jshInterruptOff() {
   irqMask = getIrqMask();
-  irq_set_mask_enabled(irqMask, false);
+  irq_set_mask_enabled(irqMask, false);  //dont stop timer irq 3
 }
 
 void jshInterruptOn() {
@@ -120,6 +123,7 @@ bool jshIsInInterrupt() {
 }
 
 void jshDelayMicroseconds(int microsec) {
+  sleep_us((uint32_t)microsec);
 }
 
 bool jshIsDeviceInitialised(IOEventFlags device) { return true; }
@@ -136,12 +140,13 @@ JsVarFloat jshGetMillisecondsFromTime(JsSysTime time) {
   return ((JsVarFloat)time)/1000;
 }
 
+JsSysTime sys_startTime = 0;
 JsSysTime jshGetSystemTime() {
-    return (JsSysTime)time_us_64();
+  return sys_startTime + (JsSysTime)time_us_64();
 }
 
 void jshSetSystemTime(JsSysTime time) {
-	printf("jshSetSystemTime not implemented yet");
+  sys_startTime = (time - (JsSysTime)time_us_64());
 }
 
 // ----------------------------------------------------------------------------

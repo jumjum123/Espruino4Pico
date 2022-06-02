@@ -1,0 +1,15 @@
+This list is a reminder for things comin to my mind during porting
+
+Analog 		read coded
+Console		works
+Flash 		coded, require("Flash") read/write/erase Page tested
+		save() tested
+I2C		coded, tested with DS3231 from I2C0
+Pin		coded, set/reset tested
+		watch is missing
+Pulse
+PWM		coded
+SPI             coded, tested with loop (MISO-MOSI from SPI0)
+Timer		coded
+UART		coded, tested with loop (RX-TX from UART0)
+Working from IDE

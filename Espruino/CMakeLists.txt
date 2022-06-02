@@ -17,6 +17,7 @@ add_executable(Espruino main.c
 	targets/RPI2040/jshardwareTimer.c
     targets/RPI2040/jshardwareUart.c
 	targets/RPI2040/jshardwareTools.c
+	targets/RPI2040/jshardwareOneWire.c
 	src/jslex.c
 	src/jsflags.c 
 	src/jsflash.c 
@@ -24,6 +25,7 @@ add_executable(Espruino main.c
 	src/jsvariterator.c 
 	src/jsutils.c 
 	src/jsnative.c 
+	src/jsonewire_common.c
 	src/jsparse.c 
 	src/jspin.c 
 	src/jsinteractive.c 
@@ -78,6 +80,7 @@ target_link_libraries(Espruino
   hardware_i2c
   hardware_spi
   hardware_pwm
+  hardware_rtc
 )
 
 add_subdirectory(targets)

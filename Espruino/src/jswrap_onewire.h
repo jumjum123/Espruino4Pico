@@ -21,3 +21,7 @@ void jswrap_onewire_skip(JsVar *parent);
 void jswrap_onewire_write(JsVar *parent, JsVar *data, bool leavePowerOn);
 JsVar *jswrap_onewire_read(JsVar *parent, JsVar *count);
 JsVar *jswrap_onewire_search(JsVar *parent, int command);
+
+JsVarInt NO_INLINE OneWireRead(Pin pin, int bits);
+void NO_INLINE OneWireWrite(Pin pin, int bits, unsigned long long data);
+bool NO_INLINE OneWireReset(Pin pin);

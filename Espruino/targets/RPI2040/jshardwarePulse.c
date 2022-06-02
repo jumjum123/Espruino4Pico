@@ -18,6 +18,8 @@
 #include "jshardware.h"
 #include "jshardwarePulse.h"
 #define UNUSED(x) (void)(x)
+
+#include "pico/stdlib.h"
  
 void PulseReset(){
    UNUSED(1); 
@@ -26,5 +28,7 @@ void PulseInit(){
   UNUSED(1);	
 }
 void jshPinPulse(Pin pin, bool value, JsVarFloat time) {
-	
+  jshPinSetValue(pin,value);
+  sleep_ms(time);
+  jshPinSetValue(pin,!value);
 } 

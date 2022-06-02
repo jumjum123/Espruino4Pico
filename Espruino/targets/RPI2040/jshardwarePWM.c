@@ -27,14 +27,22 @@ void PWMReset(){
 	 
 }
 JshPinFunction jshPinAnalogOutput(Pin pin, JsVarFloat value, JsVarFloat freq, JshAnalogOutputFlags flags) { // if freq<=0, 
-  writePinPWM(pin,(uint16_t) value * 100,(uint16_t) freq);
+  if (value<0) value=0;
+  if (value>1) value=1;
+  if (!freq) freq = 100;
+  if (!isfinite(freq)) freq=100;
+  if(pin >= 26 & pin <= 28){
+	printf("pins for ADC\n");
+  }
+  else {
+    writePinPWM(pin,(uint16_t) (value * 100),(uint16_t) freq);
+  }
   return 0;
 }
 void writePinPWM(Pin pin,uint16_t value,uint16_t freq){
   gpio_set_function(pin,GPIO_FUNC_PWM);
   uint slice_num = pwm_gpio_to_slice_num(pin);
   uint chan = pwm_gpio_to_channel(pin);
-  
   uint32_t clock = 125000000;
   uint32_t divider16 = clock / freq / 4096 + (clock % (freq * 4096) != 0);
   if(divider16 / 16 == 0) divider16 = 16;
